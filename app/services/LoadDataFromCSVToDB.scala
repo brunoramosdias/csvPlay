@@ -3,7 +3,7 @@ package services
 import javax.inject._
 
 import com.github.tototoshi.csv.CSVReader
-import models.persintence.DB
+import database.persintence.DB
 import models.{Airport, Country, Runway}
 import play.api.Environment
 import play.api.inject.ApplicationLifecycle
@@ -22,10 +22,10 @@ class LoadDataFromCSVToDB  @Inject() (appLifecycle: ApplicationLifecycle) extend
   def start(): Unit = {
     val countryFile = environment.getFile("/resources/countries.csv")
     val reader = CSVReader.open(countryFile)
-    var lines = reader.all();
+    var lines = reader.all()
     lines = lines.slice(1,lines.size -1)
     val countries = lines.map(line => {
-       new Country(line(0).toLong,
+      Country(line.head.toLong,
                         line(1),
                         line(2),
                         line(3),
@@ -44,7 +44,7 @@ class LoadDataFromCSVToDB  @Inject() (appLifecycle: ApplicationLifecycle) extend
       val latitude  : Float = if (line(4) != null && line(4).length > 0) line(4).toFloat else  null.asInstanceOf[Float]
       val longitude : Float = if (line(5) != null && line(5).length > 0) line(5).toFloat else  null.asInstanceOf[Float]
       val elevation : Float = if (line(6) != null && line(6).length > 0) line(6).toFloat else  null.asInstanceOf[Float]
-      new Airport(line(0).toLong,
+      Airport(line.head.toLong,
         line(1),
         line(2),
         line(3),
@@ -77,7 +77,7 @@ class LoadDataFromCSVToDB  @Inject() (appLifecycle: ApplicationLifecycle) extend
       val he_displaced_threshold_ft : String  = if (line.length > 20) line(20) else ""
       val lighted : Boolean = if (line(7).nonEmpty) line(7).map(char => {char.toInt > 0}).toList.head else false
       val closed  : Boolean = if(line(8).nonEmpty) line(8).map(char => {char.toInt > 0}).toList.head else false
-      new Runway(line(0).toLong,
+      Runway(line.head.toLong,
                 line(1).toLong,
                 line(2),
                 length_ft,

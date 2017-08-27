@@ -1,4 +1,4 @@
-package models.persintence
+package database.persintence
 
 import models.{Airport, Country, Runway}
 import sorm._
